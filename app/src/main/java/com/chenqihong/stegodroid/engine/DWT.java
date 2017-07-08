@@ -45,5 +45,8 @@ public class DWT {
                 DWTUtils.setPixel(bitmap, i, j, pixels[i][j]);
             }
         }
+
+        tree = DWTUtils.waveletTransform(bitmap, mLevel, mFilters, mMethod);
+        return tree;
     }
 }

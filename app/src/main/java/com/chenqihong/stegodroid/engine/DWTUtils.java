@@ -1,6 +1,7 @@
 package com.chenqihong.stegodroid.engine;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 /**
  * Created by chenqihong on 2017/7/7.
@@ -95,7 +96,7 @@ public class DWTUtils {
         Bitmap tempImg = null;
 
         // Coarse
-        tempImg = Bitmap.createBitmap(coarseImg.getWidth(), coarseImg.getHeight(), Bitmap.Config.ARGB_8888);
+        tempImg = Bitmap.createBitmap(coarseImg.getWidth(), inputImg.getHeight(), Bitmap.Config.ARGB_8888);
         convoluteLines(tempImg, inputImg, filterH, method);
         convoluteRows(coarseImg, tempImg, filterH, method);
 
@@ -103,7 +104,7 @@ public class DWTUtils {
         convoluteRows(horizontalImg, tempImg, filterG, method);
 
         // Vertical
-        tempImg = Bitmap.createBitmap(coarseImg.getWidth(), coarseImg.getHeight(), Bitmap.Config.ARGB_8888);
+        tempImg = Bitmap.createBitmap(verticalImg.getWidth(), inputImg.getHeight(), Bitmap.Config.ARGB_8888);
         convoluteLines(tempImg, inputImg, filterG, method);
         convoluteRows(verticalImg, tempImg, filterH, method);
 
@@ -409,6 +410,52 @@ public class DWTUtils {
         } else {
             return num % div;
         }
+    }
+
+    private static void copyIntoImage(Bitmap img1, Bitmap img2, int x, int y) {
+        int count = 0;
+        int start = 0;
+        int aim = 0;
+        double[] temp = null;
+
+        start = img1.getWidth() * y + x;
+
+        for (int i = 0; i < img2.getHeight(); i++) {
+            for (int j = 0; j < img2.getWidth(); j++) {
+                img1.setPixel(start + j, img1.getWidth() * i, img2.getPixel(i, j));
+            }
+        }
+    }
+
+    public static void invDecomposition(Bitmap sumImg, Bitmap coarseImg, Bitmap horizontalImg, Bitmap verticalImg, Bitmap diagonalImg, FilterGH filterGH,
+                                        int method) {
+        Bitmap tempImg = null;
+        Filter filterG = null;
+        Filter filterH = null;
+
+        if (filterGH.getType() == FilterGH.TYPE_ORTHOGONAL) {
+            filterG = filterGH.getG();
+            filterH = filterGH.getH();
+        } else {
+            filterG = filterGH.getGi();
+            filterH = filterGH.getHi();
+        }
+
+        // Coarse
+        tempImg = Bitmap.createBitmap(coarseImg.getWidth(), sumImg.getHeight(), Bitmap.Config.ARGB_8888);
+        convoluteRows(tempImg, coarseImg, filterH, method);
+
+        // Horizontal
+        convoluteRows(tempImg, horizontalImg, filterG, method);
+        convoluteLines(sumImg, tempImg, filterH, method);
+
+        // Vertical
+        tempImg = Bitmap.createBitmap(verticalImg.getWidth(), sumImg.getHeight(), Bitmap.Config.ARGB_8888);
+        convoluteRows(tempImg, verticalImg, filterH, method);
+
+        // Diagonal
+        convoluteRows(tempImg, diagonalImg, filterG, method);
+        convoluteLines(sumImg, tempImg, filterG, method);
     }
 
 }

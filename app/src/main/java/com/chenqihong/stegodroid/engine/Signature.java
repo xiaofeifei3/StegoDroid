@@ -11,15 +11,15 @@ import java.io.ObjectOutputStream;
  */
 
 public class Signature {
-    byte[] mSig = "MUCFC".getBytes();
-    int mWatermarkLength = 1000;
-    int mWaveletFilterMethod = 0;
-    int mFileterId = 0;
-    int mDecompositionLevel = 0;
-    double mAlpha = 0;
-    double mCastingThreshold = 0;
-    double mDetectionThreshold = 0;
-    double[] mWatermark = null;
+    private byte[] mSig = "MUCFC".getBytes();
+    private int mWatermarkLength = 1000;
+    private int mWaveletFilterMethod = 0;
+    private int mFileterId = 0;
+    private int mDecompositionLevel = 0;
+    private double mAlpha = 0;
+    private double mCastingThreshold = 0;
+    private double mDetectionThreshold = 0;
+    private double[] mWatermark = null;
 
     public Signature(byte[] sigData){
         ObjectInputStream ois = null;
@@ -70,5 +70,77 @@ public class Signature {
         }
 
         return null;
+    }
+
+    public byte[] getmSig() {
+        return mSig;
+    }
+
+    public void setmSig(byte[] mSig) {
+        this.mSig = mSig;
+    }
+
+    public int getmWatermarkLength() {
+        return mWatermarkLength;
+    }
+
+    public void setmWatermarkLength(int mWatermarkLength) {
+        this.mWatermarkLength = mWatermarkLength;
+    }
+
+    public int getmWaveletFilterMethod() {
+        return mWaveletFilterMethod;
+    }
+
+    public void setmWaveletFilterMethod(int mWaveletFilterMethod) {
+        this.mWaveletFilterMethod = mWaveletFilterMethod;
+    }
+
+    public int getmFileterId() {
+        return mFileterId;
+    }
+
+    public void setmFileterId(int mFileterId) {
+        this.mFileterId = mFileterId;
+    }
+
+    public int getmDecompositionLevel() {
+        return mDecompositionLevel;
+    }
+
+    public void setmDecompositionLevel(int mDecompositionLevel) {
+        this.mDecompositionLevel = mDecompositionLevel;
+    }
+
+    public double getmAlpha() {
+        return mAlpha;
+    }
+
+    public void setmAlpha(double mAlpha) {
+        this.mAlpha = mAlpha;
+    }
+
+    public double getmCastingThreshold() {
+        return mCastingThreshold;
+    }
+
+    public void setmCastingThreshold(double mCastingThreshold) {
+        this.mCastingThreshold = mCastingThreshold;
+    }
+
+    public double getmDetectionThreshold() {
+        return mDetectionThreshold;
+    }
+
+    public void setmDetectionThreshold(double mDetectionThreshold) {
+        this.mDetectionThreshold = mDetectionThreshold;
+    }
+
+    public double[] getmWatermark() {
+        return mWatermark;
+    }
+
+    public void setmWatermark(double[] mWatermark) {
+        this.mWatermark = mWatermark;
     }
 }
