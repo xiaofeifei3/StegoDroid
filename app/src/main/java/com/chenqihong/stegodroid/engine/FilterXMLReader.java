@@ -7,6 +7,7 @@
 package com.chenqihong.stegodroid.engine;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,11 +32,9 @@ public class FilterXMLReader {
 
     /**
      * This method parses the given XML file into the list of objects
-     *
-     * @param fileURI URI for the XML file
      * @return Map of filters with key being Integer object for filter ID
      */
-    public static Map<Integer, FilterGH> parse(String fileURI) {
+    public static Map<Integer, FilterGH> parse(InputStream is) {
         Map<Integer, FilterGH> filterGHMap = new HashMap<Integer, FilterGH>();
         DocumentBuilder db = null;
         Document dom = null;
@@ -47,7 +46,7 @@ public class FilterXMLReader {
             db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
             // Parse to get DOM representation of the XML file
-            dom = db.parse(db.getClass().getResourceAsStream(fileURI));
+            dom = db.parse(is);
 
             // Get a node list of filterGH elements
             nl = dom.getDocumentElement().getElementsByTagName("filterGH");

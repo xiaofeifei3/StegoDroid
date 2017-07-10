@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.chenqihong.stegodroid.R;
 import com.chenqihong.stegodroid.engine.Steganography;
+import com.chenqihong.stegodroid.engine.Watermarking;
 import com.chenqihong.stegodroid.tasks.CreateMessageTask;
 import com.chenqihong.stegodroid.tasks.CreateTask;
 import com.chenqihong.stegodroid.tasks.FindTask;
@@ -26,6 +27,7 @@ import net.vrallev.android.task.Task;
 import net.vrallev.android.task.TaskExecutor;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     private TextView mExtractedInfoText;
     private String mSelectedImagePath;
     private Bitmap mStegoBitmap;
+    private InputStream mFilterIs;
     private Handler mCreateHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mFilterIs = this.getClass().getClassLoader().getResourceAsStream("assets/filters.xml");
         initView();
     }
 
@@ -119,9 +123,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                     try {
                         Message message = mCreateHandler.obtainMessage();
                         message.what = 1;
-                        Bitmap image = Steganography.withInput(mSelectedImagePath)
+                        Bitmap image = Watermarking.
+                                embedMark(Watermarking.withInput(mSelectedImagePath), mFilterIs, "Chenqihong3").getBitmap();
+                        /*Bitmap image = Steganography.withInput(mSelectedImagePath)
                                 .withPassword("Chenqihong3")
-                                .encodeMessage(mInfoEdit.getText().toString()).getBitmap();
+                                .encodeMessage(mInfoEdit.getText().toString()).getBitmap();*/
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("image", image);
                         message.setData(bundle);

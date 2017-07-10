@@ -2,6 +2,7 @@ package com.chenqihong.stegodroid.engine;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 
 /**
  * Created by chenqihong on 2017/7/7.
@@ -9,8 +10,17 @@ import android.graphics.Canvas;
 
 public class DWTUtils {
     public static void setPixel(Bitmap image, int x, int y, double val){
+        if(y != 0) {
+            y ++;
+        }
+
         if (!(image == null || x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight())) {
-            image.setPixel(x, y * image.getWidth(), (int)val);
+            int v = (int)val;
+            int a = 254;
+            int r = (v & 0xff0000) >> 16;
+            int g = (v & 0x00ff00) >> 8;
+            int b = (v & 0x0000ff);
+            image.setPixel(x, y, Color.argb(a, r, g, b));
         }
     }
 
@@ -233,10 +243,12 @@ public class DWTUtils {
             fStart = filter.getStart();
             fEnd = filter.getEnd();
             iStart = mod(((2 * i) - fStart), inLen);
-            pixel = outputImg.getPixel(outStart, i * outStep);
+            int step= i * outStep / outputImg.getWidth();
+            pixel = outputImg.getPixel(outStart, step);
             for (int j = fStart; j <= fEnd; j++) {
+                int newStep = iStart * inStep / inputImg.getWidth();
                 pixel += filter.getData()[j - fStart]
-                        * inputImg.getPixel(inStart,iStart * inStep);
+                        * inputImg.getPixel(inStart,newStep);
                 iStart--;
                 if (iStart < 0) {
                     iStart += inLen;

@@ -2,6 +2,7 @@ package com.chenqihong.stegodroid.engine;
 
 import android.graphics.Bitmap;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -11,16 +12,16 @@ import java.util.Map;
 public class DWT {
 
     private static Map<Integer, FilterGH> mFilterGHMap = null;
-    private String mFilterFile = "";
+    private String mFilterFile = "assets/filters.xml";
     private FilterGH[] mFilters = null;
     private int mCols = 0;
     private int mRows = 0;
     private int mLevel = 0;
     private int mMethod = 0;
 
-    public DWT(int cols, int rows, int filterId, int level, int method){
+    public DWT(int cols, int rows, int filterId, int level, int method, InputStream is){
         if(mFilterGHMap == null){
-            mFilterGHMap = FilterXMLReader.parse(mFilterFile);
+            mFilterGHMap = FilterXMLReader.parse(is);
         }
 
         mFilters = new FilterGH[level + 1];
